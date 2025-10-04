@@ -1,0 +1,30 @@
+============================================================
+ASTEROID ANALYSIS SUMMARY REPORT
+Generated: 2025-10-04 11:57:04
+============================================================
+
+📊 Dataset Overview:
+   • Total Asteroids Analyzed: 207
+   • Date Range: 2024-10-01 to 2024-10-07
+
+🎯 Size Statistics:
+   • Average Diameter: 0.116 km
+   • Largest Asteroid: 1.637 km
+   • Smallest Asteroid: 0.002 km
+
+⚠️ Risk Assessment:
+   • Potentially Hazardous: 7 (3.4%)
+   • Average Miss Distance: 24,788,964 km
+   • Closest Approach: 54,723 km
+
+🚀 Velocity Analysis:
+   • Average Velocity: 45,866 km/h
+   • Fastest Asteroid: 108,673 km/h
+   • Slowest Asteroid: 11,651 km/h
+
+🔍 Key Findings:
+   • Largest asteroid: 186822 (2004 FE31) (1.637 km)
+   • Closest approach: (2024 TM3) (54,723 km)
+   • Fastest asteroid: (2019 FT) (108,673 km/h)
+
+============================================================

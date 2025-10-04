@@ -1,25 +1,34 @@
 # 🌌 Meteorite Madness
 
-A Python application that connects to NASA APIs to fetch and visualize Near Earth Objects (NEOs) and asteroid data.
+A comprehensive Python application that integrates multiple data sources to analyze and visualize Near Earth Objects (NEOs), asteroids, and meteorite impacts with enhanced multi-source data analysis.
 
 ## 🚀 Features
 
-- **NASA API Integration**: Connect to multiple NASA APIs including:
-  - Astronomy Picture of the Day (APOD)
-  - Near Earth Object Web Service (NeoWs)
-  - Meteorite Landing Data
+### 🛸 NASA API Integration
+- **Astronomy Picture of the Day (APOD)**
+- **Near Earth Object Web Service (NeoWs)**
+- **Meteorite Landing Database**
 
-- **Interactive Visualizations**: 
-  - 📊 Size distribution charts
-  - 🎯 Distance vs velocity scatter plots
-  - 🌌 Interactive 3D visualizations
-  - 📅 Timeline charts of asteroid approaches
+### 🌍 Multi-Source Data Integration
+- **World Bank Population Data** - Global population statistics
+- **NOAA Space Weather** - Solar activity and space weather conditions
+- **Enhanced Meteorite Database** - Historical impact data with coordinates
+- **Risk Assessment Analysis** - Population-based impact risk calculations
 
-- **Data Analysis**: Process and analyze asteroid characteristics including:
-  - Estimated diameter
-  - Miss distance from Earth
-  - Relative velocity
-  - Potentially hazardous classification
+### 🎨 Advanced Visualizations
+- **Global Impact Maps** - Interactive world maps of meteorite impacts
+- **Temporal Analysis** - Historical patterns and trends over time
+- **Risk Assessment Dashboards** - Comprehensive threat analysis
+- **3D Interactive Plots** - Explore asteroids in 3D space
+- **Correlation Heatmaps** - Statistical relationships between properties
+- **Timeline Charts** - Asteroid approach schedules
+
+### 📊 Enhanced Analytics
+- **Multi-source data correlation analysis**
+- **Population-based risk zone calculations**
+- **Historical meteorite pattern recognition**
+- **Space weather impact analysis**
+- **Comprehensive reporting system**
 
 ## 📋 Requirements
 

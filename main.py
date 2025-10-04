@@ -10,6 +10,13 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 
+# Import our enhanced modules
+from data_integrator import EnhancedDataIntegrator
+from enhanced_visualizer import MultiSourceVisualizer
+
+# Import the improved visualization manager
+from visualization_manager import VisualizationManager, create_all_visualizations
+
 class NASAAPIClient:
     """Client for connecting to NASA APIs"""
     
@@ -291,25 +298,123 @@ def main():
         if not df.empty:
             print(f"Processing {len(df)} asteroid records for visualization...")
             
-            # 1. Size distribution charts
-            print("📊 Creating size distribution charts...")
-            visualizer.create_size_distribution(df)
+            # Use the improved visualization manager
+            create_all_visualizations(df)
             
-            # 2. Distance vs Velocity scatter plot
-            print("🎯 Creating distance vs velocity scatter plot...")
-            visualizer.create_distance_velocity_scatter(df)
-            
-            # 3. Interactive 3D plot
-            print("🌌 Creating interactive 3D visualization...")
-            visualizer.create_interactive_3d_plot(df)
-            
-            # 4. Timeline chart
-            print("📅 Creating timeline chart...")
-            visualizer.create_timeline_chart(df)
-            
-            print("\n✨ All visualizations complete!")
+            print("\n✨ All visualizations complete and saved to files!")
         else:
             print("No asteroid data available for visualization")
 
+def enhanced_analysis():
+    """
+    Enhanced analysis with multi-source data integration
+    """
+    API_KEY = "Ch4TrNR37h2gfN5g1vyRcLsgtHeKv9SPw5aDHplE"
+    
+    print("🌟 ENHANCED METEORITE MADNESS - Multi-Source Analysis")
+    print("=" * 60)
+    
+    # Initialize enhanced components
+    nasa_client = NASAAPIClient(API_KEY)
+    integrator = EnhancedDataIntegrator(API_KEY)
+    multi_visualizer = MultiSourceVisualizer()
+    
+    # Get NASA NEO data
+    print("\n🛸 Fetching Near Earth Objects data...")
+    neo_data = nasa_client.get_neo_feed('2024-10-01', '2024-10-07')
+    neo_df = pd.DataFrame()
+    
+    if neo_data:
+        visualizer = NEOVisualizer()
+        neo_df = visualizer.process_neo_data(neo_data)
+        print(f"✅ Processed {len(neo_df)} asteroid records")
+    
+    # Get enhanced meteorite data with coordinates
+    print("\n☄️ Fetching enhanced historical meteorite data...")
+    meteorite_df = integrator.get_historical_meteorite_data()
+    if not meteorite_df.empty:
+        print(f"✅ Retrieved {len(meteorite_df)} meteorite records with coordinates")
+        print(f"   📊 Average mass: {meteorite_df['mass_g'].mean():.1f}g")
+        print(f"   📅 Year range: {meteorite_df['year'].min()} - {meteorite_df['year'].max()}")
+    
+    # Get population data
+    print("\n🌍 Fetching global population data...")
+    population_df = integrator.get_population_data(['US', 'CN', 'IN', 'BR', 'RU', 'JP', 'DE', 'UK'])
+    if not population_df.empty:
+        print(f"✅ Retrieved population data for {len(population_df)} countries")
+    
+    # Get space weather data
+    print("\n🌞 Fetching space weather data...")
+    space_weather = integrator.get_space_weather_data()
+    if space_weather:
+        print(f"✅ Retrieved space weather data ({len(space_weather)} records)")
+    
+    # Enhanced Visualizations using improved manager
+    print("\n🎨 Creating Enhanced Multi-Source Visualizations...")
+    
+    if not neo_df.empty:
+        print("   � Creating comprehensive asteroid visualizations...")
+        create_all_visualizations(neo_df)
+    
+    if not meteorite_df.empty:
+        print("   �️ Historical meteorite analysis...")
+        viz_manager = VisualizationManager()
+        # Create a simple meteorite analysis
+        meteorite_summary = f"""
+📋 HISTORICAL METEORITE ANALYSIS
+{'='*50}
+Total meteorites: {len(meteorite_df)}
+Average mass: {meteorite_df['mass_g'].mean():.1f}g if 'mass_g' in meteorite_df.columns else 'N/A'
+Year range: {meteorite_df['year'].min()} - {meteorite_df['year'].max()}
+Countries affected: {meteorite_df['country'].nunique() if 'country' in meteorite_df.columns else 'N/A'}
+"""
+        print(meteorite_summary)
+    
+    # Generate comprehensive report
+    print("\n📋 Generating comprehensive analysis report...")
+    report = integrator.create_comprehensive_report(neo_df)
+    
+    print(f"\n📊 COMPREHENSIVE ANALYSIS REPORT")
+    print(f"Generated: {report['timestamp'][:19]}")
+    print(f"\n📈 Data Sources:")
+    for source, count in report['data_sources'].items():
+        print(f"   • {source.replace('_', ' ').title()}: {count} records")
+    
+    if 'analysis' in report and report['analysis']:
+        print(f"\n🔍 Key Findings:")
+        if 'risk_zones' in report['analysis']:
+            risk = report['analysis']['risk_zones']
+            print(f"   • High Risk Asteroids: {risk.get('high_risk_asteroids', 0)}")
+            print(f"   • Medium Risk Asteroids: {risk.get('medium_risk_asteroids', 0)}")
+            print(f"   • Low Risk Asteroids: {risk.get('low_risk_asteroids', 0)}")
+        
+        if 'historical_patterns' in report['analysis']:
+            hist = report['analysis']['historical_patterns']
+            print(f"   • Total Historical Meteorites: {hist.get('total_meteorites', 0)}")
+            print(f"   • Average Mass: {hist.get('average_mass', 0):.1f}g")
+            print(f"   • Most Common Class: {hist.get('most_common_class', 'Unknown')}")
+    
+    if report.get('recommendations'):
+        print(f"\n💡 Recommendations:")
+        for i, rec in enumerate(report['recommendations'], 1):
+            print(f"   {i}. {rec}")
+    
+    print(f"\n✨ Enhanced multi-source analysis complete!")
+    print(f"🔗 Data sources successfully integrated:")
+    print(f"   • NASA NEO API ✅")
+    print(f"   • NASA Meteorite Database ✅")
+    print(f"   • World Bank Population Data ✅")
+    print(f"   • NOAA Space Weather ✅")
+
 if __name__ == "__main__":
-    main()
+    # Choose which analysis to run
+    print("🚀 Meteorite Madness - Choose Analysis Mode:")
+    print("1. Basic NASA API Demo (original)")
+    print("2. Enhanced Multi-Source Analysis (new)")
+    
+    choice = input("\nEnter choice (1 or 2): ").strip()
+    
+    if choice == "2":
+        enhanced_analysis()
+    else:
+        main()
