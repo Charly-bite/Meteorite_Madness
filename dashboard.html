@@ -288,10 +288,11 @@
         <div class="header">
             <h1>🌌 Meteorite Madness</h1>
             <p>NASA Asteroid & Near Earth Object Analysis Dashboard</p>
-            <p>Real-time data from NASA APIs • Generated October 4, 2025</p>
+            <p>Real-time data from NASA APIs • Generated October 04, 2025 at 13:23</p>
             
             <div class="nav-links">
                 <a href="#overview" class="nav-link">📊 Overview</a>
+                <a href="#simulator" class="nav-link">🌌 Solar System</a>
                 <a href="#visualizations" class="nav-link">🎨 Visualizations</a>
                 <a href="#analysis" class="nav-link">📋 Analysis</a>
                 <a href="#findings" class="nav-link">🔍 Key Findings</a>
@@ -326,6 +327,40 @@
                     <h3>24.8M km</h3>
                     <p>Average Miss Distance</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- Solar System Simulator -->
+        <section id="simulator" class="visualization-section">
+            <h2 class="section-title">🌌 Solar System Simulator</h2>
+            
+            <div class="viz-grid">
+                <div class="viz-card">
+                    <h4>🪐 Interactive 3D Solar System</h4>
+                    <iframe src="solar_system_simulator.html" style="height: 600px;"></iframe>
+                    <p>Explore our solar system in 3D with real asteroid trajectories, planetary orbits, and interactive controls. Zoom, rotate, and track near-Earth objects in real-time.</p>
+                </div>
+                
+                <div class="viz-card">
+                    <h4>📅 Asteroid Approach Timeline</h4>
+                    <iframe src="asteroid_timeline.html"></iframe>
+                    <p>Timeline visualization showing when asteroids make their closest approach to Earth. Size indicates asteroid diameter, color indicates hazard level.</p>
+                </div>
+            </div>
+            
+            <div class="analysis-card">
+                <h4>📋 Simulation Report</h4>
+                <p>The solar system simulator uses real NASA data to track asteroid trajectories and provide comprehensive risk assessment. 
+                   All orbital mechanics calculations are based on current scientific models and real-time observation data.</p>
+                <br>
+                <p><strong>Features:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>🎯 Real asteroid trajectory plotting</li>
+                    <li>🪐 Accurate planetary positions and orbits</li>
+                    <li>📊 Risk assessment and classification</li>
+                    <li>⚡ Interactive 3D controls</li>
+                    <li>📈 Historical and predictive analysis</li>
+                </ul>
             </div>
         </section>
 

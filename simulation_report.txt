@@ -1,0 +1,52 @@
+🌌 SOLAR SYSTEM SIMULATION REPORT
+============================================================
+Generated: 2025-10-04 13:43:45
+
+📊 SIMULATION OVERVIEW:
+   • Total Asteroids Tracked: 207
+   • Potentially Hazardous Objects: 7 (3.4%)
+   • Simulation Period: October 1-7, 2024
+   • Reference Frame: Earth-centric view
+
+🎯 NOTABLE ASTEROIDS:
+   • Closest Approach: (2024 TM3)
+     Distance: 54,723 km
+     Date: 2024-10-05
+     
+   • Largest Object: 186822 (2004 FE31)
+     Diameter: 1.637 km
+     Classification: Non-Hazardous
+     
+   • Fastest Moving: (2019 FT)
+     Velocity: 108,673 km/h
+     Approach Distance: 73,211,941 km
+
+🔍 RISK ASSESSMENT:
+   • Critical Range (<100,000 km): 2
+   • Close Range (100k-1M km): 14
+   • Safe Range (>1M km): 191
+   
+   • Size Categories:
+     - Large (>1 km): 4
+     - Medium (0.1-1 km): 45
+     - Small (<0.1 km): 158
+
+📈 ORBITAL MECHANICS:
+   • Average Miss Distance: 24,788,964 km
+   • Average Velocity: 45,866 km/h
+   • Moon Distance Reference: 384,400 km
+   • Earth's Hill Sphere: ~1.5 million km
+
+💡 SIMULATION INSIGHTS:
+   • All tracked objects maintain safe distances from Earth
+   • Continuous monitoring ensures early detection of threats
+   • 3D visualization provides comprehensive spatial understanding
+   • Real NASA data enables accurate trajectory prediction
+
+🌍 PLANETARY DEFENSE READINESS:
+   • Detection: Advanced (NASA NEO Observation Program)
+   • Tracking: Continuous monitoring active
+   • Assessment: Real-time risk evaluation
+   • Response: International coordination protocols in place
+
+============================================================

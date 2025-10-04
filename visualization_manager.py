@@ -27,8 +27,13 @@ class VisualizationManager:
         plt.style.use('dark_background')
         sns.set_palette("viridis")
         
-        # Configure plotly for static export
-        pio.kaleido.scope.mathjax = None
+        # Configure plotly for static export (with error handling)
+        try:
+            if hasattr(pio, 'kaleido') and pio.kaleido.scope is not None:
+                pio.kaleido.scope.mathjax = None
+        except (AttributeError, Exception) as e:
+            print(f"⚠️  Kaleido configuration warning: {e}")
+            print("📊 Plotly visualizations will still work, just without some static export features")
         
     def ensure_output_dir(self):
         """Create output directory if it doesn't exist"""

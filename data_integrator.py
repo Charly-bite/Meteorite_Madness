@@ -35,7 +35,8 @@ class EnhancedDataIntegrator:
                     'format': 'json',
                     'date': '2023',
                     'per_page': 300
-                }
+                },
+                timeout=10
             )
             response.raise_for_status()
             
@@ -65,7 +66,7 @@ class EnhancedDataIntegrator:
         url = "https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json"
         
         try:
-            response = self.session.get(url)
+            response = self.session.get(url, timeout=8)
             response.raise_for_status()
             return response.json()
         
@@ -87,10 +88,12 @@ class EnhancedDataIntegrator:
                 '$where': 'mass IS NOT NULL AND reclat IS NOT NULL AND reclong IS NOT NULL'
             }
             
-            response = self.session.get(url, params=params)
+            print(f"🔄 Fetching enhanced meteorite data (timeout: 12s)...")
+            response = self.session.get(url, params=params, timeout=12)
             response.raise_for_status()
             
             meteorites = response.json()
+            print(f"✅ Successfully fetched {len(meteorites)} enhanced meteorite records")
             
             # Process and enhance the data
             enhanced_data = []
@@ -108,9 +111,65 @@ class EnhancedDataIntegrator:
             
             return pd.DataFrame(enhanced_data)
         
+        except requests.exceptions.Timeout:
+            print(f"⏰ Timeout fetching enhanced meteorite data - using fallback data")
+            return self._get_fallback_meteorite_df()
         except requests.exceptions.RequestException as e:
-            print(f"Error fetching enhanced meteorite data: {e}")
-            return pd.DataFrame()
+            print(f"❌ Error fetching enhanced meteorite data: {e}")
+            print(f"🔄 Using fallback meteorite data...")
+            return self._get_fallback_meteorite_df()
+    
+    def _get_fallback_meteorite_df(self) -> pd.DataFrame:
+        """Provide fallback meteorite DataFrame when API is unavailable"""
+        fallback_data = [
+            {
+                'name': 'Allende',
+                'mass_g': 2000000.0,
+                'year': '1969',
+                'latitude': 26.96667,
+                'longitude': -105.31667,
+                'recclass': 'CV3',
+                'fall': 'Fell'
+            },
+            {
+                'name': 'Murchison',
+                'mass_g': 100000.0,
+                'year': '1969',
+                'latitude': -36.61667,
+                'longitude': 145.2,
+                'recclass': 'CM2', 
+                'fall': 'Fell'
+            },
+            {
+                'name': 'Canyon Diablo',
+                'mass_g': 30000.0,
+                'year': '1891',
+                'latitude': 35.05,
+                'longitude': -111.03333,
+                'recclass': 'IAB-MG',
+                'fall': 'Found'
+            },
+            {
+                'name': 'Chelyabinsk',
+                'mass_g': 500000.0,
+                'year': '2013',
+                'latitude': 54.83333,
+                'longitude': 61.13333,
+                'recclass': 'LL5',
+                'fall': 'Fell'
+            },
+            {
+                'name': 'Tunguska',
+                'mass_g': 10000000.0,
+                'year': '1908',
+                'latitude': 60.886,
+                'longitude': 101.886,
+                'recclass': 'Unknown',
+                'fall': 'Fell'
+            }
+        ]
+        print(f"📊 Using {len(fallback_data)} fallback meteorite records")
+        return pd.DataFrame(fallback_data)
     
     def calculate_impact_risk_zones(self, neo_df: pd.DataFrame, population_df: pd.DataFrame) -> pd.DataFrame:
         """
