@@ -317,8 +317,8 @@ source .venv/bin/activate
 pip install flask flask-cors requests pandas matplotlib seaborn numpy plotly
 
 # Set API Keys
-export NASA_API_KEY="Ch4TrNR37h2gfN5g1vyRcLsgtHeKv9SPw5aDHplE"
-export GEMINI_API_KEY="AIzaSyDM36G2Dgw4J6RfQJvkFja1MPPd4VJHhx4"
+export NASA_API_KEY="API_KEY_HERE"
+export GEMINI_API_KEY="API_KEY_HERE"
 
 # Run Web Application
 python app.py
