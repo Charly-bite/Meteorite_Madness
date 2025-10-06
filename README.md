@@ -89,8 +89,8 @@ pip install flask flask-cors requests pandas matplotlib seaborn numpy plotly
 
 4. Set up API keys:
 ```bash
-export NASA_API_KEY="Ch4TrNR37h2gfN5g1vyRcLsgtHeKv9SPw5aDHplE"
-export GEMINI_API_KEY="AIzaSyDM36G2Dgw4J6RfQJvkFja1MPPd4VJHhx4"
+export NASA_API_KEY="API_KEY_HERE"
+export GEMINI_API_KEY="API_KEY_HERE"
 ```
 
 Or configure them directly in the code files.
