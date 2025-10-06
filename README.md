@@ -98,6 +98,10 @@ Or configure them directly in the code files.
 ## 🎮 Usage
 
 ### Running the Web Application
+Open the webapp here: https://wenriverab.wixstudio.com/impactor/
+
+
+OR
 
 Start the Flask server:
 
