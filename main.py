@@ -602,14 +602,77 @@ Countries affected: {meteorite_df['country'].nunique() if 'country' in meteorite
     print("\n" + "="*60)
     run_solar_system_simulation(neo_data)
 
+def run_impact_consequence_analysis():
+    """Run comprehensive impact consequence analysis with real NEO data"""
+    print("\n🔥 METEOR IMPACT CONSEQUENCE ANALYSIS")
+    print("="*50)
+    
+    # Import the impact simulator
+    from impact_consequence_simulator import ImpactConsequenceSimulator
+    
+    API_KEY = "Ch4TrNR37h2gfN5g1vyRcLsgtHeKv9SPw5aDHplE"
+    
+    # Get real NEO data
+    nasa_client = NASAAPIClient(API_KEY)
+    neo_data = nasa_client.get_neo_feed('2024-10-01', '2024-10-07')
+    
+    if not neo_data:
+        print("❌ Could not fetch NEO data for impact analysis")
+        return
+    
+    # Initialize impact simulator
+    simulator = ImpactConsequenceSimulator(API_KEY)
+    
+    # Get top 5 most dangerous asteroids for analysis
+    asteroids = []
+    for date, objects in neo_data['near_earth_objects'].items():
+        for obj in objects:
+            asteroids.append(obj)
+    
+    # Sort by size and velocity to get most dangerous
+    dangerous_asteroids = sorted(asteroids, 
+                               key=lambda x: float(x.get('estimated_diameter', {}).get('kilometers', {}).get('estimated_diameter_max', 0)) * 
+                                           float(x.get('close_approach_data', [{}])[0].get('relative_velocity', {}).get('kilometers_per_hour', 0)),
+                               reverse=True)[:5]
+    
+    # Define high-risk impact locations (major population centers)
+    impact_locations = [
+        (40.7128, -74.0060),  # New York City
+        (51.5074, -0.1278),   # London
+        (35.6762, 139.6503),  # Tokyo
+        (19.4326, -99.1332),  # Mexico City
+        (28.6139, 77.2090),   # Delhi
+    ]
+    
+    # Simulate impacts
+    impact_events = []
+    for i, asteroid in enumerate(dangerous_asteroids):
+        if i < len(impact_locations):
+            lat, lon = impact_locations[i]
+            impact_event = simulator.simulate_impact(asteroid, lat, lon)
+            impact_events.append(impact_event)
+    
+    # Create comprehensive visualization
+    print("\n🎨 Creating comprehensive impact consequence visualization...")
+    fig = simulator.create_impact_visualization(impact_events)
+    fig.write_html("meteor_impact_consequences.html")
+    
+    print("✅ Impact consequence analysis complete!")
+    print("📁 Files generated:")
+    print("   • meteor_impact_consequences.html - Interactive impact analysis")
+    print("   • impact_consequence_report.txt - Detailed assessment")
+    
+    return impact_events
+
 if __name__ == "__main__":
     # Choose which analysis to run
     print("🚀 Meteorite Madness - Choose Analysis Mode:")
     print("1. Basic NASA API Demo (original)")
     print("2. Enhanced Multi-Source Analysis (recommended)")
     print("3. Solar System Simulator Only")
+    print("4. 🔥 Impact Consequence Analysis (NEW!)")
     
-    choice = input("\nEnter choice (1, 2, or 3): ").strip()
+    choice = input("\nEnter choice (1, 2, 3, or 4): ").strip()
     
     if choice == "2":
         enhanced_analysis()
@@ -619,5 +682,7 @@ if __name__ == "__main__":
         nasa_client = NASAAPIClient(API_KEY)
         neo_data = nasa_client.get_neo_feed('2024-10-01', '2024-10-07')
         run_solar_system_simulation(neo_data)
+    elif choice == "4":
+        run_impact_consequence_analysis()
     else:
         main()

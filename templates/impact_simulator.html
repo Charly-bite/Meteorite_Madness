@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Simulation System - Meteorite Madness</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #2c3e50;
+            --color-secondary: #e74c3c;
+            --color-accent: #3498db;
+            --color-warning: #f39c12;
+            --color-danger: #c0392b;
+            --color-success: #27ae60;
+            --color-critical: #9a0710;
+            --color-dark: #2c3e50;
+            --color-light: #ecf0f1;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        .severity-minor { color: var(--color-success); }
+        .severity-moderate { color: var(--color-warning); }
+        .severity-severe { color: var(--color-danger); }
+        .severity-catastrophic { color: var(--color-critical); }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: var(--color-light);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            grid-template-rows: 80px 1fr;
+            height: 100vh;
+            gap: 0;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--color-secondary);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            color: var(--color-secondary);
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-link {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .status-value {
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+
+        .sidebar {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid #34495e;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .panel-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #34495e;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--color-accent);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .panel-title.warning { color: var(--color-warning); }
+        .panel-title.info { color: var(--color-success); }
+        .panel-title.danger { color: var(--color-secondary); }
+        .panel-title i { font-size: 1.2rem; }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #34495e;
+            border-radius: 5px;
+            color: white;
+            font-size: 0.9rem;
+            appearance: none;
+        }
+        
+        .input-group select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23ecf0f1' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 10px;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        .slider-container {
+            margin: 1.5rem 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-value {
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: #34495e;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .btn-primary { background: var(--color-accent); color: white; }
+        .btn-danger { background: var(--color-danger); color: white; }
+        .btn-warning { background: var(--color-warning); color: var(--color-dark); }
+        .btn-success { background: var(--color-success); color: white; }
+        .btn-scenario { background: #34495e; color: var(--color-light); font-size: 0.85rem; }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #defense-strategy-content, #narrative-content {
+            padding: 1rem;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--color-accent);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            color: #bdc3c7;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--color-accent);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .map-container {
+            position: relative;
+            background: #1a2a3a;
+        }
+
+        #impact-map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .simulation-overlay {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--color-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            min-width: 300px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .simulation-title {
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .simulation-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #bdc3c7;
+            margin-top: 0.25rem;
+        }
+
+        .layers-control {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            padding: 1rem;
+            z-index: 1000;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+        }
+
+        .layer-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .layer-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--color-accent);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .layer-checkbox.checked {
+            background: var(--color-accent);
+        }
+
+        .layer-checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 80px auto 1fr;
+            }
+            
+            .sidebar {
+                grid-row: 2;
+                max-height: 70vh;
+            }
+            
+            .map-container {
+                grid-row: 3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-meteor"></i>
+                <h1>Impact Simulation System</h1>
+            </div>
+            <a href="/" class="nav-link">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <div class="status-bar">
+                <div class="status-item">
+                    <span>Status:</span>
+                    <span class="status-value severity-minor" id="system-status">READY</span>
+                </div>
+                <div class="status-item">
+                    <span>Severity:</span>
+                    <span class="status-value severity-minor" id="severity-level">Minor</span>
+                </div>
+                <div class="status-item">
+                    <span>UTC:</span>
+                    <span class="status-value" id="utc-time">--:--:--</span>
+                </div>
+            </div>
+        </header>
+
+        <aside class="sidebar">
+            <!-- Meteoroid Parameters -->
+            <div class="panel-section">
+                <div class="panel-title">
+                    <i class="fas fa-meteor"></i>
+                    <h3>Meteoroid Data</h3>
+                </div>
+                
+                <div class="input-group">
+                    <label for="meteoroid-id">Meteoroid ID/Name</label>
+                    <input type="text" id="meteoroid-id" value="Impactor-2025">
+                </div>
+
+                <div class="input-group">
+                    <label for="meteoroid-type">Composition Type</label>
+                    <select id="meteoroid-type">
+                        <option value="rocky">Rocky (Density: 3000 kg/m³)</option>
+                        <option value="metallic">Metallic (Density: 7800 kg/m³)</option>
+                        <option value="carbonaceous">Carbonaceous (Density: 1500 kg/m³)</option>
+                        <option value="porous">Porous (Density: 1000 kg/m³)</option>
+                    </select>
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Diameter (m)</span>
+                        <span class="slider-value" id="diameter-value">100</span>
+                    </div>
+                    <input type="range" id="diameter" min="10" max="1000" value="100" step="10">
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Velocity (km/s)</span>
+                        <span class="slider-value" id="velocity-value">20</span>
+                    </div>
+                    <input type="range" id="velocity" min="5" max="72" value="20" step="1">
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Entry Angle (°)</span>
+                        <span class="slider-value" id="angle-value">45</span>
+                    </div>
+                    <input type="range" id="angle" min="5" max="90" value="45" step="5">
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Density (kg/m³)</span>
+                        <span class="slider-value" id="density-value">3000</span>
+                    </div>
+                    <input type="range" id="density" min="1000" max="8000" value="3000" step="100">
+                </div>
+            </div>
+
+            <!-- Historical Scenarios -->
+            <div class="panel-section">
+                <div class="panel-title info">
+                    <i class="fas fa-history"></i>
+                    <h3>Historical Scenarios</h3>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-scenario" data-scenario="chelyabinsk">
+                        <i class="fas fa-star"></i>Chelyabinsk
+                    </button>
+                    <button class="btn btn-scenario" data-scenario="tunguska">
+                        <i class="fas fa-tree"></i>Tunguska
+                    </button>
+                </div>
+            </div>
+
+            <!-- Simulation Config -->
+            <div class="panel-section">
+                <div class="panel-title">
+                    <i class="fas fa-sliders-h"></i>
+                    <h3>Simulation Config</h3>
+                </div>
+
+                <div class="input-group">
+                    <label for="impact-location">Impact Location (Lat, Lng)</label>
+                    <input type="text" id="impact-location" value="40.7128, -74.0060" placeholder="e.g., 40.7128, -74.0060">
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" id="run-simulation">
+                        <i class="fas fa-play"></i>Run Simulation
+                    </button>
+                    <button class="btn btn-warning" id="reset-simulation">
+                        <i class="fas fa-redo"></i>Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Impact Metrics -->
+            <div class="panel-section">
+                <div class="panel-title">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Impact Metrics</h3>
+                </div>
+                
+                <div class="simulation-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="energy-value">0.00</div>
+                        <div class="stat-label">Energy (MT)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="crater-value">0.0</div>
+                        <div class="stat-label">Crater (km)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="overpressure-value">0</div>
+                        <div class="stat-label">Overpressure (kPa)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="population-value">0</div>
+                        <div class="stat-label">Population Affected</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Defense Strategy -->
+            <div class="panel-section">
+                <div class="panel-title danger">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Planetary Defense</h3>
+                </div>
+                
+                <button class="btn btn-danger" id="generate-defense" style="width: 100%; margin-bottom: 1rem;">
+                    <div class="loading-spinner"></div>
+                    <i class="fas fa-brain"></i>
+                    Generate AI Strategy
+                </button>
+                
+                <div id="defense-strategy-content">
+                    Click the button above to generate an AI-powered planetary defense strategy based on current threat parameters.
+                </div>
+            </div>
+
+            <!-- Impact Narrative -->
+            <div class="panel-section">
+                <div class="panel-title warning">
+                    <i class="fas fa-book"></i>
+                    <h3>Impact Scenario</h3>
+                </div>
+                
+                <button class="btn btn-warning" id="generate-narrative" style="width: 100%; margin-bottom: 1rem;">
+                    <div class="loading-spinner"></div>
+                    <i class="fas fa-file-alt"></i>
+                    Generate AI Narrative
+                </button>
+                
+                <div id="narrative-content">
+                    Click the button above to generate a detailed impact scenario narrative using AI.
+                </div>
+            </div>
+        </aside>
+
+        <main class="map-container">
+            <div id="impact-map"></div>
+            
+            <div class="simulation-overlay" id="simulation-overlay" style="display: none;">
+                <div class="simulation-title">Simulation in Progress</div>
+                <div class="simulation-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="sim-altitude">--</div>
+                        <div class="stat-label">Altitude (km)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="sim-velocity">--</div>
+                        <div class="stat-label">Velocity (km/s)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="sim-mass">--</div>
+                        <div class="stat-label">Mass Remaining</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="sim-energy">--</div>
+                        <div class="stat-label">Energy Released</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layers-control">
+                <div class="layer-item" id="layer-population">
+                    <div class="layer-checkbox checked"></div>
+                    <span>Population Density</span>
+                </div>
+                <div class="layer-item" id="layer-blast">
+                    <div class="layer-checkbox checked"></div>
+                    <span>Blast Wave</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="/static/impact-simulator.js"></script>
+</body>
+</html>

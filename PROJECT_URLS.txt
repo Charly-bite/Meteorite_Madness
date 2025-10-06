@@ -1,0 +1,355 @@
+================================================================================
+                    METEORITE MADNESS - PROJECT URLS
+                    Impactor-2025 - NASA Challenge
+================================================================================
+
+Project Repository: https://github.com/Charly-bite/Meteorite_Madness
+Date: October 2025
+
+
+================================================================================
+1. API ENDPOINTS
+================================================================================
+
+NASA APIs
+---------
+• https://api.nasa.gov/planetary/apod
+  Description: Astronomy Picture of the Day
+
+• https://api.nasa.gov/neo/rest/v1/feed
+  Description: Near Earth Object feed data
+
+• https://data.nasa.gov/resource/gh4g-9sfh.json
+  Description: Meteorite landing database
+
+• https://api.nasa.gov/
+  Description: NASA API portal (get API keys)
+
+
+Google Gemini AI
+----------------
+• https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent
+  Description: AI content generation endpoint
+
+• https://makersuite.google.com/app/apikey
+  Description: Google AI Studio - Get API keys
+
+• https://ai.google.dev/pricing
+  Description: Gemini AI pricing information
+
+
+USGS Data Services
+------------------
+• https://earthquake.usgs.gov/fdsnws/event/1/query
+  Description: Earthquake data API
+
+• https://nationalmap.gov/epqs/pqs.php
+  Description: Elevation query service
+
+
+================================================================================
+2. CDN RESOURCES
+================================================================================
+
+JavaScript Libraries
+--------------------
+• https://unpkg.com/leaflet@1.7.1/dist/leaflet.js
+  Description: Leaflet mapping library (JavaScript)
+
+• https://unpkg.com/leaflet@1.7.1/dist/leaflet.css
+  Description: Leaflet CSS styles
+
+
+Fonts & Icons
+-------------
+• https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css
+  Description: Font Awesome icon library
+
+• https://fonts.openmaptiles.org/{fontstack}/{range}.pbf
+  Description: Map fonts for labels and text
+
+
+Plotly Resources
+----------------
+• https://cdn.plot.ly/un/
+  Description: Plotly topojson data
+
+
+================================================================================
+3. MAP TILE SERVICES
+================================================================================
+
+OpenStreetMap
+-------------
+• https://a.tile.openstreetmap.org/{z}/{x}/{y}.png
+  Description: OSM tiles - Server A
+
+• https://b.tile.openstreetmap.org/{z}/{x}/{y}.png
+  Description: OSM tiles - Server B
+
+• https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+  Description: OSM tiles - Generic server pattern
+
+
+CartoDB/Carto Basemaps
+----------------------
+• https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png
+  Description: Carto dark basemap
+
+• https://cartodb-basemaps-c.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png
+  Description: Carto Positron (light theme)
+
+• https://cartodb-basemaps-c.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png
+  Description: Carto Darkmatter (dark theme)
+
+
+Stamen Maps (via Stadia Maps)
+------------------------------
+• https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}.png?api_key=
+  Description: Stamen terrain tiles
+
+• https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}.png?api_key=
+  Description: Stamen toner (high contrast)
+
+• https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=
+  Description: Stamen watercolor (artistic)
+
+
+================================================================================
+4. DOCUMENTATION & LEARNING RESOURCES
+================================================================================
+
+Library Documentation
+---------------------
+• https://github.com/d3/d3-format/tree/v1.4.5#d3-format
+  Description: D3.js number formatting documentation
+
+• https://github.com/d3/d3-time-format/tree/v2.2.3#locale_format
+  Description: D3.js time formatting documentation
+
+• https://plotly.com/
+  Description: Plotly homepage
+
+• https://plotly.com/javascript/animations/
+  Description: Plotly animations guide
+
+
+WebGL Support
+-------------
+• https://get.webgl.org
+  Description: WebGL compatibility checker and download
+
+
+================================================================================
+5. GITHUB & VERSION CONTROL
+================================================================================
+
+• https://github.com/Charly-bite
+  Description: Developer GitHub profile
+
+• https://github.com/Charly-bite/Meteorite_Madness
+  Description: Project repository
+
+• https://github.com/Charly-bite/Meteorite_Madness.git
+  Description: Git clone URL
+
+
+================================================================================
+6. LOCAL DEVELOPMENT SERVERS
+================================================================================
+
+Main Application
+----------------
+• http://localhost:5000
+  Description: Flask web application (main dashboard)
+
+• http://127.0.0.1:5000
+  Description: Localhost IPv4 address
+
+• http://10.8.13.128:5000
+  Description: Network interface (LAN access)
+
+
+Application Routes
+------------------
+• http://localhost:5000/
+  Description: Main dashboard
+
+• http://localhost:5000/impact-simulator
+  Description: Advanced impact simulator with AI
+
+
+Alternative Ports
+-----------------
+• http://localhost:8001/
+  Description: Alternative development server
+
+• http://localhost:8001/index.html
+  Description: Navigation hub
+
+• http://localhost:8001/dashboard.html
+  Description: Dashboard view
+
+• http://localhost:8001/solar_system_simulator.html
+  Description: 3D solar system simulator
+
+• http://localhost:8001/asteroid_timeline.html
+  Description: Timeline view
+
+
+API Endpoints (Local)
+----------------------
+• http://localhost:5000/api/neo/recent
+  Description: Recent NEO data
+
+• http://localhost:5000/api/statistics
+  Description: Statistics endpoint
+
+• http://localhost:5000/api/visualizations/threat-map
+  Description: Threat map data
+
+• http://localhost:5000/api/visualizations/threat-analysis
+  Description: Threat analysis data
+
+• http://localhost:5000/api/impact/simulate
+  Description: Impact simulation endpoint
+
+
+================================================================================
+7. ATTRIBUTION & LICENSE LINKS
+================================================================================
+
+OpenStreetMap
+-------------
+• https://www.openstreetmap.org/copyright
+  Description: OSM copyright and attribution
+
+• https://openstreetmap.org
+  Description: OpenStreetMap homepage
+
+
+Carto
+-----
+• https://carto.com/
+  Description: Carto mapping platform
+
+
+Stamen Design
+-------------
+• https://stamen.com
+  Description: Stamen Design studio
+
+
+Creative Commons Licenses
+-------------------------
+• https://creativecommons.org/licenses/by/3.0
+  Description: CC BY 3.0 License
+
+• https://creativecommons.org/licenses/by-sa/3.0
+  Description: CC BY-SA 3.0 License
+
+
+================================================================================
+8. XML/SVG NAMESPACES (Technical)
+================================================================================
+
+• http://www.w3.org/1999/xhtml
+  Description: XHTML namespace
+
+• http://www.w3.org/2000/svg
+  Description: SVG namespace
+
+• http://www.w3.org/1999/xlink
+  Description: XLink namespace
+
+• http://www.w3.org/XML/1998/namespace
+  Description: XML namespace
+
+• http://www.w3.org/2000/xmlns/
+  Description: XML namespace declaration
+
+
+================================================================================
+9. SUMMARY STATISTICS
+================================================================================
+
+Total Categories: 9
+- API Endpoints: 12 URLs
+- CDN Resources: 5 URLs
+- Map Tile Services: 10 URLs
+- Documentation: 6 URLs
+- GitHub: 3 URLs
+- Local Development: 15 URLs
+- Attribution/Licenses: 7 URLs
+- XML Namespaces: 5 URLs
+
+Total Unique URLs: 60+
+
+
+================================================================================
+10. API KEYS USED
+================================================================================
+
+NASA API Key:
+• Ch4TrNR37h2gfN5g1vyRcLsgtHeKv9SPw5aDHplE
+
+Google Gemini AI Key:
+• AIzaSyDM36G2Dgw4J6RfQJvkFja1MPPd4VJHhx4
+
+
+================================================================================
+11. SETUP COMMANDS
+================================================================================
+
+Clone Repository:
+git clone https://github.com/Charly-bite/Meteorite_Madness.git
+cd "Meteorite Madness"
+
+Install Dependencies:
+pip install flask flask-cors requests pandas matplotlib seaborn numpy plotly
+
+Set Environment Variables:
+export NASA_API_KEY="Ch4TrNR37h2gfN5g1vyRcLsgtHeKv9SPw5aDHplE"
+export GEMINI_API_KEY="AIzaSyDM36G2Dgw4J6RfQJvkFja1MPPd4VJHhx4"
+
+Run Application:
+python app.py
+
+Access:
+http://localhost:5000
+
+
+================================================================================
+NOTES
+================================================================================
+
+1. All map tile services require proper attribution as per their licenses
+2. API keys should be kept secure and not committed to public repositories
+3. Some services (Stadia Maps) may require their own API keys for production use
+4. Rate limits apply to NASA API (use API key for higher limits)
+5. Gemini AI API has usage quotas - check pricing page for details
+6. WebGL is required for 3D visualizations
+7. CORS is enabled on Flask backend for local development
+
+
+================================================================================
+PROJECT INFORMATION
+================================================================================
+
+Project: Impactor-2025
+Challenge: Hackatón GDL - NASA Meteor Madness
+Team: Meteorite Madness
+Date: October 2025
+
+Technology Stack:
+- Backend: Python 3.8+, Flask
+- Frontend: JavaScript, Leaflet.js, Plotly.js, Bootstrap 5
+- AI: Google Gemini 2.0 Flash
+- Data: NASA NEO API, USGS
+
+For more information, see README.md
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Meteorite Madness - Planetary Defense Platform</title>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #ea580c;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .asteroid-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px 0;
+            border-left: 4px solid var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+        .asteroid-card.hazardous {
+            border-left-color: var(--danger-color);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .asteroid-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-hazard {
+            background: var(--danger-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .badge-safe {
+            background: var(--success-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 4px;
+            border-color: var(--secondary-color);
+            border-right-color: transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--secondary-color), #8b5cf6);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .impact-simulator {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 2px solid var(--warning-color);
+        }
+
+        .form-control, .form-select {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: var(--secondary-color);
+            color: #e2e8f0;
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        .form-select option {
+            background: var(--dark-bg);
+            color: #e2e8f0;
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-tabs .nav-link {
+            color: #94a3b8;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #60a5fa;
+            border: none;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(45deg, var(--secondary-color), #8b5cf6);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            border: none;
+        }
+
+        .alert-custom {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .impact-result {
+            background: linear-gradient(135deg, rgba(234, 88, 12, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 2px solid var(--danger-color);
+        }
+
+        .impact-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .impact-metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #60a5fa;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            .stat-number {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-meteor me-2"></i>
+                    Meteorite Madness
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#asteroids">Asteroids</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#simulator">Simulator</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/impact-simulator" target="_blank">
+                                <i class="fas fa-map-marked-alt me-1"></i>Advanced Simulator
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#analytics">Analytics</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <div class="hero-section">
+            <h1><i class="fas fa-globe-americas"></i> Planetary Defense Platform</h1>
+            <p class="lead">Real-time Near Earth Object monitoring, impact assessment, and consequence analysis</p>
+            <p class="text-muted">Combining NASA NEO data with USGS geological information for comprehensive threat analysis</p>
+        </div>
+
+        <!-- Statistics Section -->
+        <div id="overview" class="section">
+            <h2 class="section-title mb-4"><i class="fas fa-chart-bar"></i> Real-Time Statistics</h2>
+            <div id="statistics-loading" class="loading-spinner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading statistics...</span>
+                </div>
+                <p class="mt-3">Loading asteroid data...</p>
+            </div>
+            <div id="statistics-content" style="display:none;">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-total">0</div>
+                            <div class="stat-label">Total Asteroids</div>
+                            <small class="text-muted">Last 7 days</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card">
+                            <div class="stat-number text-danger" id="stat-hazardous">0</div>
+                            <div class="stat-label">Hazardous</div>
+                            <small class="text-muted" id="stat-hazard-pct">0% of total</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card">
+                            <div class="stat-number text-warning" id="stat-energy">0</div>
+                            <div class="stat-label">Total Energy (MT)</div>
+                            <small class="text-muted">Combined impact potential</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card">
+                            <div class="stat-number text-info" id="stat-avg-energy">0</div>
+                            <div class="stat-label">Avg Energy (MT)</div>
+                            <small class="text-muted">Per asteroid</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="stat-card">
+                            <h5><i class="fas fa-crown text-warning"></i> Largest Asteroid</h5>
+                            <div id="largest-asteroid" class="mt-3">
+                                <div class="metric-value" id="largest-name">-</div>
+                                <div class="mt-2">
+                                    <span class="metric-label">Diameter:</span>
+                                    <span class="metric-value" id="largest-diameter">-</span> km
+                                </div>
+                                <div>
+                                    <span class="metric-label">Velocity:</span>
+                                    <span class="metric-value" id="largest-velocity">-</span> km/h
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stat-card">
+                            <h5><i class="fas fa-rocket text-danger"></i> Fastest Asteroid</h5>
+                            <div id="fastest-asteroid" class="mt-3">
+                                <div class="metric-value" id="fastest-name">-</div>
+                                <div class="mt-2">
+                                    <span class="metric-label">Velocity:</span>
+                                    <span class="metric-value" id="fastest-velocity">-</span> km/h
+                                </div>
+                                <div>
+                                    <span class="metric-label">Diameter:</span>
+                                    <span class="metric-value" id="fastest-diameter">-</span> km
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Map -->
+        <div id="threats" class="section mt-5">
+            <h2 class="section-title mb-4"><i class="fas fa-map-marked-alt"></i> Global Threat Map</h2>
+            <div class="chart-container">
+                <div id="threat-map-loading" class="loading-spinner">
+                    <div class="spinner-border" role="status"></div>
+                    <p class="mt-3">Generating global threat assessment...</p>
+                </div>
+                <div id="threat-map" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Recent Asteroids -->
+        <div class="section mt-5">
+            <h2 class="section-title mb-4"><i class="fas fa-asteroid"></i> Recent Near Earth Objects</h2>
+            <div id="asteroids-loading" class="loading-spinner">
+                <div class="spinner-border" role="status"></div>
+                <p class="mt-3">Fetching asteroid data from NASA...</p>
+            </div>
+            <div id="asteroids-list" style="display:none;"></div>
+        </div>
+
+        <!-- Impact Simulator -->
+        <div id="simulator" class="section mt-5">
+            <h2 class="section-title mb-4"><i class="fas fa-fire"></i> Impact Consequence Simulator</h2>
+            <div class="impact-simulator">
+                <div class="alert alert-custom">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Simulate asteroid impacts on Earth:</strong> Select an asteroid and location to calculate potential consequences including crater size, blast radius, seismic effects, population impact, and economic damage.
+                </div>
+                
+                <form id="impact-form">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="fas fa-meteor"></i> Select Asteroid</label>
+                            <select class="form-select" id="asteroid-select" required>
+                                <option value="">Loading asteroids...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="fas fa-map-pin"></i> Latitude</label>
+                            <input type="number" class="form-control" id="impact-lat" 
+                                   value="40.7128" step="0.0001" min="-90" max="90" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="fas fa-map-pin"></i> Longitude</label>
+                            <input type="number" class="form-control" id="impact-lon" 
+                                   value="-74.0060" step="0.0001" min="-180" max="180" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fas fa-city"></i> Quick Location Select</label>
+                            <div class="btn-group w-100" role="group">
+                                <button type="button" class="btn btn-outline-primary" onclick="setLocation(40.7128, -74.0060)">New York</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="setLocation(51.5074, -0.1278)">London</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="setLocation(35.6762, 139.6503)">Tokyo</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="setLocation(19.4326, -99.1332)">Mexico City</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="setLocation(28.6139, 77.2090)">Delhi</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-4">
+                        <i class="fas fa-play"></i> Simulate Impact
+                    </button>
+                </form>
+
+                <div id="impact-loading" class="loading-spinner" style="display:none;">
+                    <div class="spinner-border" role="status"></div>
+                    <p class="mt-3">Calculating impact consequences...</p>
+                </div>
+
+                <div id="impact-result" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="analytics" class="section mt-5">
+            <h2 class="section-title mb-4"><i class="fas fa-chart-pie"></i> Comprehensive Analytics</h2>
+            <div class="chart-container">
+                <div id="analytics-loading" class="loading-spinner">
+                    <div class="spinner-border" role="status"></div>
+                    <p class="mt-3">Generating comprehensive threat analysis...</p>
+                </div>
+                <div id="analytics-chart" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-text">
+                <p><strong>🌌 Meteorite Madness - Planetary Defense Platform</strong></p>
+                <p>Data sources: NASA NEO API | USGS Geological Services | World Bank Demographics</p>
+                <p class="mb-0">
+                    <i class="fas fa-shield-alt"></i> Understanding the threat is the first step toward planetary defense
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global data storage
+        let asteroidsData = [];
+
+        // Load statistics
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/statistics');
+                const data = await response.json();
+                
+                document.getElementById('stat-total').textContent = data.total_asteroids.toLocaleString();
+                document.getElementById('stat-hazardous').textContent = data.hazardous_asteroids.toLocaleString();
+                document.getElementById('stat-hazard-pct').textContent = `${data.hazard_percentage}% of total`;
+                document.getElementById('stat-energy').textContent = data.total_energy_megatons.toLocaleString();
+                document.getElementById('stat-avg-energy').textContent = data.average_energy.toLocaleString();
+                
+                if (data.largest_asteroid) {
+                    document.getElementById('largest-name').textContent = data.largest_asteroid.name;
+                    document.getElementById('largest-diameter').textContent = data.largest_asteroid.diameter.toFixed(3);
+                    document.getElementById('largest-velocity').textContent = data.largest_asteroid.velocity.toLocaleString();
+                }
+                
+                if (data.fastest_asteroid) {
+                    document.getElementById('fastest-name').textContent = data.fastest_asteroid.name;
+                    document.getElementById('fastest-velocity').textContent = data.fastest_asteroid.velocity.toLocaleString();
+                    document.getElementById('fastest-diameter').textContent = data.fastest_asteroid.diameter.toFixed(3);
+                }
+                
+                document.getElementById('statistics-loading').style.display = 'none';
+                document.getElementById('statistics-content').style.display = 'block';
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                document.getElementById('statistics-loading').innerHTML = 
+                    `<div class="alert alert-danger">Failed to load statistics: ${error.message}</div>`;
+            }
+        }
+
+        // Load asteroids list
+        async function loadAsteroids() {
+            try {
+                const response = await fetch('/api/neo/recent');
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error);
+                }
+                
+                asteroidsData = data.asteroids;
+                
+                // Populate list
+                const listEl = document.getElementById('asteroids-list');
+                listEl.innerHTML = data.asteroids.slice(0, 20).map((asteroid, idx) => `
+                    <div class="asteroid-card ${asteroid.is_hazardous ? 'hazardous' : ''}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5><i class="fas fa-meteor"></i> ${asteroid.name}</h5>
+                                <span class="${asteroid.is_hazardous ? 'badge-hazard' : 'badge-safe'}">
+                                    ${asteroid.is_hazardous ? '⚠️ HAZARDOUS' : '✅ NON-HAZARDOUS'}
+                                </span>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-muted">ID: ${asteroid.id}</small>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <div class="metric-label">Diameter</div>
+                                <div class="metric-value">${asteroid.diameter_km.toFixed(3)} km</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-label">Velocity</div>
+                                <div class="metric-value">${asteroid.velocity_kmh.toLocaleString()} km/h</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-label">Miss Distance</div>
+                                <div class="metric-value">${(asteroid.miss_distance_km / 384400).toFixed(2)} LD</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-label">Approach Date</div>
+                                <div class="metric-value">${asteroid.approach_date}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Populate select
+                const selectEl = document.getElementById('asteroid-select');
+                selectEl.innerHTML = '<option value="">Select an asteroid...</option>' +
+                    data.asteroids.map(a => 
+                        `<option value="${a.id}">${a.name} (${a.diameter_km.toFixed(3)} km, ${a.is_hazardous ? '⚠️ HAZARDOUS' : '✅ Safe'})</option>`
+                    ).join('');
+                
+                document.getElementById('asteroids-loading').style.display = 'none';
+                document.getElementById('asteroids-list').style.display = 'block';
+            } catch (error) {
+                console.error('Error loading asteroids:', error);
+                document.getElementById('asteroids-loading').innerHTML = 
+                    `<div class="alert alert-danger">Failed to load asteroids: ${error.message}</div>`;
+            }
+        }
+
+        // Load threat map
+        async function loadThreatMap() {
+            try {
+                const response = await fetch('/api/visualizations/threat-map');
+                const plotData = await response.json();
+                
+                Plotly.newPlot('threat-map', plotData.data, plotData.layout, {responsive: true});
+                
+                document.getElementById('threat-map-loading').style.display = 'none';
+                document.getElementById('threat-map').style.display = 'block';
+            } catch (error) {
+                console.error('Error loading threat map:', error);
+                document.getElementById('threat-map-loading').innerHTML = 
+                    `<div class="alert alert-danger">Failed to load threat map: ${error.message}</div>`;
+            }
+        }
+
+        // Load analytics
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/visualizations/threat-analysis');
+                const plotData = await response.json();
+                
+                Plotly.newPlot('analytics-chart', plotData.data, plotData.layout, {responsive: true});
+                
+                document.getElementById('analytics-loading').style.display = 'none';
+                document.getElementById('analytics-chart').style.display = 'block';
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                document.getElementById('analytics-loading').innerHTML = 
+                    `<div class="alert alert-danger">Failed to load analytics: ${error.message}</div>`;
+            }
+        }
+
+        // Set location helper
+        function setLocation(lat, lon) {
+            document.getElementById('impact-lat').value = lat;
+            document.getElementById('impact-lon').value = lon;
+        }
+
+        // Impact simulation
+        document.getElementById('impact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const asteroidId = document.getElementById('asteroid-select').value;
+            const lat = parseFloat(document.getElementById('impact-lat').value);
+            const lon = parseFloat(document.getElementById('impact-lon').value);
+            
+            if (!asteroidId) {
+                alert('Please select an asteroid');
+                return;
+            }
+            
+            document.getElementById('impact-loading').style.display = 'block';
+            document.getElementById('impact-result').style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/impact/simulate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({asteroid_id: asteroidId, latitude: lat, longitude: lon})
+                });
+                
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+                
+                const impact = result.impact_data;
+                
+                document.getElementById('impact-result').innerHTML = `
+                    <div class="impact-result">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Impact Assessment Results</h3>
+                        <h5 class="mt-3">${impact.asteroid_name}</h5>
+                        
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-ruler"></i> Asteroid Diameter</span>
+                            <span class="metric-value">${impact.diameter_km.toFixed(3)} km</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-tachometer-alt"></i> Impact Velocity</span>
+                            <span class="metric-value">${impact.velocity_kmh.toLocaleString()} km/h</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-bolt"></i> Impact Energy</span>
+                            <span class="metric-value">${impact.impact_energy_megatons.toLocaleString()} megatons</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-circle-notch"></i> Crater Diameter</span>
+                            <span class="metric-value">${impact.crater_diameter_km.toFixed(2)} km</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-fire"></i> Blast Radius</span>
+                            <span class="metric-value">${impact.blast_radius_km.toFixed(2)} km</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-wave-square"></i> Seismic Magnitude</span>
+                            <span class="metric-value">${impact.seismic_magnitude.toFixed(1)}</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-users"></i> Population Affected</span>
+                            <span class="metric-value text-danger">${impact.population_affected.toLocaleString()} people</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-dollar-sign"></i> Economic Damage</span>
+                            <span class="metric-value text-warning">$${impact.economic_damage_usd.toLocaleString()}</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-map-marker-alt"></i> Impact Location</span>
+                            <span class="metric-value">${impact.impact_location[0].toFixed(4)}°, ${impact.impact_location[1].toFixed(4)}°</span>
+                        </div>
+                        <div class="impact-metric">
+                            <span class="metric-label"><i class="fas fa-database"></i> USGS Earthquake Records</span>
+                            <span class="metric-value">${impact.usgs_earthquakes} historical events</span>
+                        </div>
+                        
+                        <div class="alert alert-danger mt-4">
+                            <i class="fas fa-exclamation-circle"></i> 
+                            <strong>Warning:</strong> This simulation represents a catastrophic event requiring immediate international emergency response and evacuation protocols.
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('impact-loading').style.display = 'none';
+                document.getElementById('impact-result').style.display = 'block';
+                
+                // Scroll to result
+                document.getElementById('impact-result').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            } catch (error) {
+                console.error('Error simulating impact:', error);
+                document.getElementById('impact-loading').innerHTML = 
+                    `<div class="alert alert-danger">Failed to simulate impact: ${error.message}</div>`;
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            loadStatistics();
+            loadAsteroids();
+            loadThreatMap();
+            loadAnalytics();
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
+                }
+            });
+        });
+    </script>
+</body>
+</html>
