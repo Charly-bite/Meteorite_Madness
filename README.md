@@ -60,6 +60,9 @@ Includes a 'Defend the Earth' game mode where users can test different planetary
 - **Severity Classification** - Minor, Moderate, Severe, Catastrophic levels
 
 ## 📋 Requirements
+- Run directly at: https://wenriverab.wixstudio.com/impactor/
+
+Or install:
 
 - Python 3.8+
 - NASA API Key (free from https://api.nasa.gov/)
@@ -103,6 +106,7 @@ python app.py
 ```
 
 Then open your browser to: **http://localhost:5000**
+
 
 The web application includes:
 1. **Main Dashboard** - Real-time NEO statistics, asteroid browser, global threat map, and analytics
