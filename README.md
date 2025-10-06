@@ -1,4 +1,4 @@
-# � Impactor-2025 - Meteorite Madness
+#  Impactor-2025 - Meteorite Madness
 
 ## Hackatón GDL - NASA Challenge | Meteor Madness
 
